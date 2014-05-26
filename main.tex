@@ -24,7 +24,9 @@
 
 \documentclass[final]{beamer}
 
-\usepackage[scale=1.24]{beamerposter} % Use the beamerposter package for laying out the poster
+\usepackage{xparse}      % << to create new commands
+
+\usepackage[scale=1]{beamerposter} % Use the beamerposter package for laying out the poster
 \usetheme{confposter} % Use the confposter theme supplied with this template
 
 \setbeamercolor{block title}{fg=ngreen,bg=white} % Colors of the block titles
@@ -69,7 +71,6 @@
 \usepackage{xltxtra}
 \defaultfontfeatures{Mapping=tex-text}
 \setromanfont[Ligatures={Common},Numbers={OldStyle},Variant=01]{Linux Libertine O}
-\setmonofont[Scale=0.8]{Monaco}
 %-----------------------------------------------------------
 
 %----------------------------------------------------------------------------------------
@@ -81,6 +82,45 @@
 \institute{Politecnico di Milano - Department of Mathematics - MOX}
 
 %----------------------------------------------------------------------------------------
+
+% ======================================================== math
+\usepackage{listings}
+\usepackage[ruled]{algorithm2e}
+\usepackage{mathtools} % << extends amsmath
+\usepackage{amsfonts}  % << some extra fonts
+\usepackage[
+  bold-style=ISO,
+]{unicode-math}
+
+\setmathfont{Latin Modern Math}
+\setmathfont[range=\mathbb]{TeX Gyre Pagella Math}
+
+\DeclareDocumentCommand\defeq{}{\mathrel{\mathop:}=}
+\DeclareDocumentCommand\dual{m}{#1^*}
+\DeclareDocumentCommand\adj{m}{#1^T}
+\DeclareDocumentCommand\inv{m}{#1^{-1}}
+\DeclareMathOperator*{\Kernel}{Ker}
+\DeclareMathOperator*{\Range}{Im}
+
+\DeclareMathOperator{\grad}{\nabla}
+\AtBeginDocument{
+  \let\div\relax
+  \DeclareMathOperator{\div}{div}
+}
+\DeclareDocumentCommand\vec{m o o}{ %
+  \mathbf{#1}\IfValueT{#2}{_{#2}}\IfValueT{#3}{^{#3}} %
+}
+\DeclareDocumentCommand\tensor{m}{#1}
+
+\DeclareDocumentCommand\inner{m m o}{ %
+  {\left( #1 , #2 \right)}\IfValueT{#3}{_{#3}} %
+}
+\DeclareDocumentCommand\norm{m o o}{ %
+  {\left\|{#1}\right\|}\IfValueT{#2}{_{#2}}\IfValueT{#3}{^{#3}} %
+}
+\DeclareDocumentCommand\duality{m m o}{ %
+  {\left\langle #1 , #2 \right\rangle}\IfValueT{#3}{_{\dual{#3} \times #3}}
+}
 
 \begin{document}
 
@@ -94,127 +134,156 @@
 
 \begin{columns}[t] % The whole poster consists of three major columns, the second of which is split into two columns twice - the [t] option aligns each column's content to the top
 
-\begin{column}{\sepwid}\end{column} % Empty spacer column
-
 \begin{column}{\onecolwid} % The first column
 
-%----------------------------------------------------------------------------------------
-% OBJECTIVES
-%----------------------------------------------------------------------------------------
-
 \begin{alertblock}{Objectives}
-
-Lorem ipsum dolor sit amet, consectetur, nunc tellus pulvinar tortor, commodo eleifend risus arcu sed odio:
-\begin{itemize}
-\item Mollis dignissim, magna augue tincidunt dolor, interdum vestibulum urna
-\item Sed aliquet luctus lectus, eget aliquet leo ullamcorper consequat. Vivamus eros sem, iaculis ut euismod non, sollicitudin vel orci.
-\item Nascetur ridiculus mus.  
-\item Euismod non erat. Nam ultricies pellentesque nunc, ultrices volutpat nisl ultrices a.
-\end{itemize}
-
+The aim of this work is the developement of a robust preconditioning technique
+for the saddle point problem with highly variable coefficients, especially the
+Darcy problem. The idea is based on the augmented Lagrangian formulation of
+saddle point problem and the multigrid preconditioning technique in $H(\div)$
+developed by Arnold \textit{et al.}. This kind of preconditioner avoid the
+construction of Schur complement and all the operators are approxymated by the
+means of conforming finite element spaces.
 \end{alertblock}
 
-%----------------------------------------------------------------------------------------
-% INTRODUCTION
-%----------------------------------------------------------------------------------------
-
 \begin{block}{Introduction}
+The Darcy's law describes the flow of fluids through porous media. This
+equation is used to model various type of phenomena such as groundwater flows
+in aquifers and expulsion of hydrocarbons from the source rock and subsequent
+seeping into reservoirs.
 
-Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo
-molestie porta. Sed ultrices scelerisque sapien ac commodo. Donec ut volutpat
-elit. Sed laoreet accumsan mattis. Integer sapien tellus, auctor ac blandit
-eget, sollicitudin vitae lorem. Praesent dictum tempor pulvinar. Suspendisse
-potenti. Sed tincidunt varius ipsum, et porta nulla suscipit et. Etiam congue
-bibendum felis, ac dictum augue cursus a. \textbf{Donec} magna eros, iaculis sit
-amet placerat quis, laoreet id est. In ut orci purus, interdum ornare nibh.
-Pellentesque pulvinar, nibh ac malesuada accumsan, urna nunc convallis tortor,
-ac vehicula nulla tellus eget nulla. Nullam lectus tortor, \textit{consequat
-tempor hendrerit} quis, vestibulum in diam. Maecenas sed diam augue.
+Even though the model might look simple, its numerical solution is not trivial,
+in particular due of the high variability of the equation's coefficients.
+Numerical iterative methods need proper preconditioning in order to find a
+solution of the problem in a reasonable time, and research on the best
+preconditioning techniques is still ongoing, especially in the context of
+parallel programming. This work aims to provide an implementation of an optimal
+preconditioner, \textit{i.e.} a preconitioner whose performance does not depend
+on the mesh size and on the variations of the equation coefficients. The
+advocated method is based on the work of Arnold, Falk and Winther in
+\cite{arnold1997preconditioning}.
 
-This statement requires citation \cite{Smith:2012qr}.
-
+A block-diagonal preconditioner based on the augmented Lagrangian formulation
+of the saddle point problem will be presented. As pointed out by other authors
+the use of this formulation instead of the original one allows us to avoid the
+necessity to construct a good approximation of the Schur complement and its
+inverse. This approach seems to be more natural for the mixed problems embedded
+in $H(\div)\times L^2$, like the Darcy problem.
 \end{block}
 
-%------------------------------------------------
+\begin{block}{Mathematical introduction}
+Let $V$ be an Hilbert space and denote its inner product with
+$\inner{\cdot}{\cdot}[V]$. A linear continuous operator $A:V \to \dual{V}$ will
+be considered. Let $Q$ be another Hilbert space and $B:V \to \dual{Q}$ a linear
+continuous operator and $\adj{B}:Q \to \dual{V}$ its own adjoint.
 
-\begin{figure}
-\includegraphics[width=0.8\linewidth]{placeholder.jpg}
-\caption{Figure caption}
-\end{figure}
-
-%----------------------------------------------------------------------------------------
+Given $\vec{f} \in \dual{V}$ and $g \in \dual{Q}$, the aim is to find
+$\vec{u} \in V$ and $p \in Q$ solutions of the problem
+\[
+  \begin{cases}
+    A\vec{u} + \adj{B}p = \vec{f} \quad &\text{in }\dual{V}, \\
+    B\vec{u} = g                  \quad &\text{in }\dual{Q},
+  \end{cases}
+\]
+If the operator $A$ is invertible on $\Kernel{B}$ and the operator $B$ is
+closed, that is, there exists $\beta > 0$ such that the $\inf$-$\sup$ condition
+is satisfied
+\[
+    \sup_{\vec{v} \in V}
+    \frac{\duality{B\vec{u}}{q}[Q]}{\norm{\vec{v}}[V]} \ge
+    \beta \norm{q}[Q],
+    \qquad
+    \forall q \in Q.
+\]
+For all $\vec{f} \in \dual{V}$ and $g \in \Range{B} \subseteq \dual{Q}$ there
+exists a unique solution $\vec{u}\in V$ and $p\in Q/\Kernel{\adj{B}}$ of the
+problem.
+\end{block}
 
 \end{column} % End of the first column
 
-\begin{column}{\sepwid}\end{column} % Empty spacer column
 
-\begin{column}{\twocolwid} % Begin a column which is two columns wide (column 2)
+\begin{column}{\onecolwid} % Begin of the second column
 
-\begin{columns}[t,totalwidth=\twocolwid] % Split up the two columns wide column
+\begin{block}{Augmented Lagrangian-type preconditioners}
+If the hypotheses of the existence and uniqueness of solution theorem are
+fulfilled and both the operators
+\[
+    \hat{A}\defeq A + \adj{B}\inv{M}B: V \to \dual{V}
+    \qquad\text{and}\qquad
+    M:Q \to \dual{Q},
+\]
+define an equivalent inner product on $V$ and $Q$, then all the eigenvalues of
+the generalized problem
+\[
+    B\inv{\hat{A}}\adj{B}q = \lambda Mq, \qquad\text{in }\dual{Q},
+\]
+belong to the interval $[\beta^2,1]$.
 
-\begin{column}{\onecolwid}\vspace{-.6in} % The first column within column 2 (column 2.1)
+This result can be used to prove that the following block operators
+\[
+    \begin{bmatrix}A & B^T \\ B & 0\end{bmatrix}
+    \qquad\text{and}\qquad
+    \begin{bmatrix}\hat{A} & 0 \\ 0 & M\end{bmatrix},
+\]
+are spectrally equivalent, the spectrum lies in $[-1, -\beta^2] \cup \{1\}$.
 
-%----------------------------------------------------------------------------------------
-% MATERIALS
-%----------------------------------------------------------------------------------------
+For the Darcy problem the operator $M$ is defined as the identity operator on
+$Q$, leading to the following $\hat{A}$ operator
+\[
+    \hat{A} = \frac{1}{\mu} I_V - \grad \div.
+\]
+\end{block}
 
-\begin{block}{Materials}
+\begin{block}{Multigrid preconditioning}
+Solving the preconditioner with a direct method can have serious drawbacks when
+the dimension of the problem is large. The two biggest concerns regard poor
+scaling and excessive memory consumption. A geometric multigrid preconditioner
+has been implemented for our problem, reproducing the work by Arnold, Falk and
+Winther in \cite{arnold1997preconditioning}.
 
-The following materials were required to complete the research:
+This method is based on a standard V-cycle multigrid, but a proper smoother
+operator $R_j$ has to be defined on each level $j=1,\dots,J$. The authors
+proposed two different smoothers, which are based respectively on an additive
+and a multiplicative Schwarz operator.
 
-\begin{itemize}
-\item Curabitur pellentesque dignissim
-\item Eu facilisis est tempus quis
-\item Duis porta consequat lorem
-\item Eu facilisis est tempus quis
-\end{itemize}
+The additive smoother $R_j : V_j \rightarrow V_j$ is defined as a multiple of
+the additive Schwarz operator applied to the following decomposition of $V_j$:
+let $\mathcal{N}_j$ be the set of vertices in the triangulation $T_j$; for
+every $\nu \in \mathcal{N}_j$, $T_{j, \nu}$ is defined as the patch made of
+mesh elements meeting at the vertex $\nu$.
+Then we can define our smoother as
+\[
+    R_j = \eta \sum_{\nu \in \mathcal{N}_j} P_{j, \nu} \; \Lambda_{j}^{-1}.
+\]
+\end{block}
 
-The materials were prepared according to the steps outlined below:
+\begin{block}{Implementation details}
+The code is based on the finite element library deal.II
+\cite{BangerthHartmannKanschat2007}, in particular version 8.1.0, which
+provides us with all the building blocks we needed.
 
-\begin{enumerate}
-\item Curabitur pellentesque dignissim
-\item Eu facilisis est tempus quis
-\item Duis porta consequat lorem
-\item Curabitur pellentesque dignissim
-\end{enumerate}
-
+\begin{algorithm*}[H]
+    \caption{\lstinline$SmootherHdiv::smooth()$}
+    \KwData{$\vec{x}_j^0$, $f_j$, $j$}
+    \For{$i < m$}{
+        Define temporary vector $\tilde{\vec{x}}$\;
+        Compute Residual ${\vec{r}}_j^i$\;
+        \For{Every vertex} {
+            Load the \lstinline$patch_to_global$ map\;
+            Extract patch residual ${\vec{r}}_v$\;
+            Solve $\hat{A}_v \tilde{\vec{v}}_v = {\vec{r}}_v$\;
+            Distribute $\tilde{\vec{x}}_v$ into $\tilde{\vec{x}}$\;
+        }
+        $\vec{x}_j^{i + 1} = \vec{x}_j^i + \eta \tilde{\vec{x}}$\;
+    }
+    \Return{$\vec{x}_j^m$}
+\end{algorithm*}
 \end{block}
 
 %----------------------------------------------------------------------------------------
 
-\end{column} % End of column 2.1
-
-\begin{column}{\onecolwid}\vspace{-.6in} % The second column within column 2 (column 2.2)
-
-%----------------------------------------------------------------------------------------
-% METHODS
-%----------------------------------------------------------------------------------------
-
-\begin{block}{Methods}
-
-Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed laoreet accumsan mattis. Integer sapien tellus, auctor ac blandit eget, sollicitudin vitae lorem. Praesent dictum tempor pulvinar. Suspendisse potenti. Sed tincidunt varius ipsum, et porta nulla suscipit et. Etiam congue bibendum felis, ac dictum augue cursus a. \textbf{Donec} magna eros, iaculis sit amet placerat quis, laoreet id est. In ut orci purus, interdum ornare nibh. Pellentesque pulvinar, nibh ac malesuada accumsan, urna nunc convallis tortor, ac vehicula nulla tellus eget nulla. Nullam lectus tortor, \textit{consequat tempor hendrerit} quis, vestibulum in diam. Maecenas sed diam augue.
-
-\end{block}
-
-%----------------------------------------------------------------------------------------
-
-\end{column} % End of column 2.2
-
-\end{columns} % End of the split of column 2 - any content after this will now take up 2 columns width
-
-%----------------------------------------------------------------------------------------
-% IMPORTANT RESULT
-%----------------------------------------------------------------------------------------
-
-\begin{alertblock}{Important Result}
-
-Lorem ipsum dolor \textbf{sit amet}, consectetur adipiscing elit. Sed commodo molestie porta. Sed ultrices scelerisque sapien ac commodo. Donec ut volutpat elit.
-
-\end{alertblock} 
-
-%----------------------------------------------------------------------------------------
-
-\begin{columns}[t,totalwidth=\twocolwid] % Split up the two columns wide column again
+\end{column} % End of the second column
 
 \begin{column}{\onecolwid} % The first column within column 2 (column 2.1)
 
@@ -247,10 +316,6 @@ Nam quis odio enim, in molestie libero. Vivamus cursus mi at nulla elementum sol
 \end{block}
 
 %----------------------------------------------------------------------------------------
-
-\end{column} % End of column 2.1
-
-\begin{column}{\onecolwid} % The second column within column 2 (column 2.2)
 
 %----------------------------------------------------------------------------------------
 % RESULTS
@@ -285,10 +350,6 @@ Treatment 3 & 0.0009271 & 0.296 \\
 
 \end{column} % End of column 2.2
 
-\end{columns} % End of the split of column 2
-
-\end{column} % End of the second column
-
 \begin{column}{\sepwid}\end{column} % Empty spacer column
 
 \begin{column}{\onecolwid} % The third column
@@ -299,22 +360,21 @@ Treatment 3 & 0.0009271 & 0.296 \\
 
 \begin{block}{Conclusion}
 
-Nunc tempus venenatis facilisis. \textbf{Curabitur suscipit} consequat eros non porttitor. Sed a massa dolor, id ornare enim. Fusce quis massa dictum tortor \textbf{tincidunt mattis}. Donec quam est, lobortis quis pretium at, laoreet scelerisque lacus. Nam quis odio enim, in molestie libero. Vivamus cursus mi at \textit{nulla elementum sollicitudin}.
+Nunc tempus venenatis facilisis. \textbf{Curabitur suscipit} consequat eros non
+porttitor. Sed a massa dolor, id ornare enim. Fusce quis massa dictum tortor
+\textbf{tincidunt mattis}. Donec quam est, lobortis quis pretium at, laoreet
+scelerisque lacus. Nam quis odio enim, in molestie libero. Vivamus cursus mi at
+\textit{nulla elementum sollicitudin}.
 
 \end{block}
 
-%----------------------------------------------------------------------------------------
-% ADDITIONAL INFORMATION
-%----------------------------------------------------------------------------------------
+\begin{block}{Future developments}
 
-\begin{block}{Additional Information}
-
-Maecenas ultricies feugiat velit non mattis. Fusce tempus arcu id ligula varius dictum. 
-\begin{itemize}
-\item Curabitur pellentesque dignissim
-\item Eu facilisis est tempus quis
-\item Duis porta consequat lorem
-\end{itemize}
+Nunc tempus venenatis facilisis. \textbf{Curabitur suscipit} consequat eros non
+porttitor. Sed a massa dolor, id ornare enim. Fusce quis massa dictum tortor
+\textbf{tincidunt mattis}. Donec quam est, lobortis quis pretium at, laoreet
+scelerisque lacus. Nam quis odio enim, in molestie libero. Vivamus cursus mi at
+\textit{nulla elementum sollicitudin}.
 
 \end{block}
 
@@ -338,7 +398,9 @@ Maecenas ultricies feugiat velit non mattis. Fusce tempus arcu id ligula varius 
 
 \begin{block}{Acknowledgements}
 
-\small{\rmfamily{Nam mollis tristique neque eu luctus. Suspendisse rutrum congue nisi sed convallis. Aenean id neque dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.}} \\
+\small{\rmfamily{Nam mollis tristique neque eu luctus. Suspendisse rutrum congue
+nisi sed convallis. Aenean id neque dolor. Pellentesque habitant morbi tristique
+senectus et netus et malesuada fames ac turpis egestas.}} \\
 
 \end{block}
 
