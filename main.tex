@@ -325,11 +325,16 @@ this case is constant and it does not depend on $h$ and $\mu$.
 
 \begin{block}{Conclusion}
 
-Nunc tempus venenatis facilisis. \textbf{Curabitur suscipit} consequat eros non
-porttitor. Sed a massa dolor, id ornare enim. Fusce quis massa dictum tortor
-\textbf{tincidunt mattis}. Donec quam est, lobortis quis pretium at, laoreet
-scelerisque lacus. Nam quis odio enim, in molestie libero. Vivamus cursus mi at
-\textit{nulla elementum sollicitudin}.
+The numerical performance of the ideal preconditioner with internal direct
+solver is as good as we expected: in all our test cases it proved to be robust
+to mesh refinement, highly variable coefficients, non-squared domains with
+local refinement and anisotropic meshes.
+
+The numerical performance of the ideal preconditioner with internal
+multigrid solver was satisfactory as well: even though the number of the outer
+GMRES iterations is always higher than its direct counterpart, the number of
+iterations stays constant regardless of the level of mesh refinement,
+permeability coefficient and grid anisotropy.
 
 \end{block}
 
@@ -379,7 +384,7 @@ senectus et netus et malesuada fames ac turpis egestas.}} \\
 \begin{alertblock}{Contact Information}
 
 \begin{itemize}
-\item Mattia Penati: \href{mailto:mattia.penati@mail.polimi.it}{mattia.penati@mail.polimi.it}
+\item Mattia Penati: \href{mailto:mattia.penati@polimi.it}{mattia.penati@polimi.it}
 \item Edie Miglio: \href{mailto:edie.miglio@polimi.it}{edie.miglio@polimi.it}
 \item Francesco Cattoglio: \href{mailto:francesco.cattoglio@mail.polimi.it}{francesco.cattoglio@mail.polimi.it}
 
