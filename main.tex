@@ -271,9 +271,11 @@ method on hierarchical meshes, along with various helper functions.
 Thanks to these features we were able to quickly implement the precondioner
 and plug it in the deal.II solving procedures.
 
-Support for distributed meshes over MPI is still experimental, but we were at
-least able to run scaling tests on the procedures of initialization of the
-preconditioner.
+We aimed at hybrid parallelization using intel TBB library and MPI-enabled
+algebraic backends.
+MPI support for distributed meshes is still experimental, but we were able
+to run scaling tests on the preconditioner initialization procedures.
+On the other hand, support for shared memory parallelism is complete.
 
 \end{block}
 
