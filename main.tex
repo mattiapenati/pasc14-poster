@@ -138,10 +138,10 @@
 
 \begin{alertblock}{Objectives}
 The aim of this work is the developement of a robust preconditioning technique
-for the saddle point problem with highly variable coefficients, especially the
+for saddle point problems with highly variable coefficients, especially the
 Darcy problem. The idea is based on the augmented Lagrangian formulation of
 saddle point problem and the multigrid preconditioning technique in $H(\div)$
-developed by Arnold \textit{et al.}. This kind of preconditioner avoid the
+developed by Arnold \textit{et al.}. This kind of preconditioner avoids the
 construction of Schur complement and all the operators are approxymated by the
 means of conforming finite element spaces.
 \end{alertblock}
@@ -226,7 +226,7 @@ This result can be used to prove that the following block operators
     \qquad\text{and}\qquad
     \begin{bmatrix}\hat{A} & 0 \\ 0 & M\end{bmatrix},
 \]
-are spectrally equivalent, the spectrum lies in $[-1, -\beta^2] \cup \{1\}$.
+are spectrally equivalent; the spectrum lies in $[-1, -\beta^2] \cup \{1\}$.
 
 For the Darcy problem the operator $M$ is defined as the identity operator on
 $Q$, leading to the following $\hat{A}$ operator
@@ -260,25 +260,18 @@ Then we can define our smoother as
 
 \begin{block}{Implementation details}
 The code is based on the finite element library deal.II
-\cite{BangerthHartmannKanschat2007}, in particular version 8.1.0, which
-provides us with all the building blocks we needed.
+\cite{BangerthHartmannKanschat2007}, version 8.1.0, which
+provided us with all the building blocks we needed.
+In particular, a module in the library implements the geometric multigrid
+method on hierarchical meshes, along with various helper functions.
 
-\begin{algorithm*}[H]
-    \caption{\lstinline$SmootherHdiv::smooth()$}
-    \KwData{$\vec{x}_j^0$, $f_j$, $j$}
-    \For{$i < m$}{
-        Define temporary vector $\tilde{\vec{x}}$\;
-        Compute Residual ${\vec{r}}_j^i$\;
-        \For{Every vertex} {
-            Load the \lstinline$patch_to_global$ map\;
-            Extract patch residual ${\vec{r}}_v$\;
-            Solve $\hat{A}_v \tilde{\vec{v}}_v = {\vec{r}}_v$\;
-            Distribute $\tilde{\vec{x}}_v$ into $\tilde{\vec{x}}$\;
-        }
-        $\vec{x}_j^{i + 1} = \vec{x}_j^i + \eta \tilde{\vec{x}}$\;
-    }
-    \Return{$\vec{x}_j^m$}
-\end{algorithm*}
+Thanks to these features we were able to quickly implement the precondioner
+and plug it in the deal.II solving procedures.
+
+Support for distributed meshes over MPI is still experimental, but we were at
+least able to run scaling tests on the procedures of initialization of the
+preconditioner.
+
 \end{block}
 
 %----------------------------------------------------------------------------------------
