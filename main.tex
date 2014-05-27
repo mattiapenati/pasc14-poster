@@ -27,6 +27,7 @@
 \usepackage{xparse}      % << to create new commands
 \usepackage{tikz}   % << diagrams
   \usetikzlibrary{arrows}
+\usepackage{url}
 
 \usepackage[scale=1]{beamerposter} % Use the beamerposter package for laying out the poster
 \usetheme{confposter} % Use the confposter theme supplied with this template
@@ -350,7 +351,7 @@ scelerisque lacus. Nam quis odio enim, in molestie libero. Vivamus cursus mi at
 
 \nocite{*} % Insert publications even if they are not cited in the poster
 \small{\bibliographystyle{unsrt}
-\bibliography{sample}\vspace{0.75in}}
+\bibliography{main}\vspace{0.75in}}
 
 \end{block}
 
@@ -378,16 +379,26 @@ senectus et netus et malesuada fames ac turpis egestas.}} \\
 \begin{alertblock}{Contact Information}
 
 \begin{itemize}
-\item Web: \href{http://www.university.edu/smithlab}{http://www.university.edu/smithlab}
-\item Email: \href{mailto:john@smith.com}{john@smith.com}
-\item Phone: +1 (000) 111 1111
+\item Mattia Penati: \href{mailto:mattia.penati@mail.polimi.it}{mattia.penati@mail.polimi.it}
+\item Edie Miglio: \href{mailto:edie.miglio@polimi.it}{edie.miglio@polimi.it}
+\item Francesco Cattoglio: \href{mailto:francesco.cattoglio@mail.polimi.it}{francesco.cattoglio@mail.polimi.it}
+
+\hrulefill
+
+The poster can be downloaded from
+\begin{center}
+    \small
+    \url{https://bitbucket.org/mattiapenati/pasc14-poster}
+\end{center}
 \end{itemize}
 
 \end{alertblock}
 
 \begin{center}
 \begin{tabular}{ccc}
-\includegraphics[width=0.4\linewidth]{logo.png} & \hfill & \includegraphics[width=0.4\linewidth]{logo.png}
+    \includegraphics[width=0.4\linewidth]{images/logopoli} %
+    & \hfill & %
+    \includegraphics[width=0.4\linewidth]{images/logomox}
 \end{tabular}
 \end{center}
 
