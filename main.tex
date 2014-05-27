@@ -292,7 +292,7 @@ The first problem is defined in $\Omega = (0,\nicefrac{7}{3}) \times (0,1)$ and
 it is partitioned into two subdomains $\Omega_1$ and $\Omega_2$. In the first subdomain $\mu$ is taken
 constant and equal to $1, 10^{1}, 10^{2}, 10^{4}, 10^{8}$, in the second one
 $\mu=1$. The forcing term $g$ is zero and the boundary conditions are chosen in
-order to have a  flux from left to right:
+order to have a flux from left to right:
 \begin{itemize}
   \item on the top and the bottom of the domain the normal component of
     $\vec{u}$ is taken equal to zero,
@@ -309,9 +309,59 @@ The number of outer iterations of GMRES method for each numerical experiment of
 this case is constant and it does not depend on $h$ and $\mu$.
 
 \begin{table}
-    {\footnotesize \input{tables/darcy_iterations_30}}
+    {\small \input{tables/darcy_iterations_30}}
 \end{table}
 
+$\;$
+
+\null
+
+The next test case is inspired by the one proposed by Sundar \textit{et al.} in \cite{burstedde2012}.
+The problem is defined in the {$\Omega = (-1, 1) \times (-1, 1)$} square,
+with homogeneous Dirichlet BCs and $f = 1$ on the whole $\Omega$.
+The grid step $h$ is a fixed $h = 2^{-7}$.
+The $\mu$ function is discontinuous, and has the checkerboard pattern shown below;
+on white tiles $\mu = 1$ while on black tiles $\mu = 10^{7}$.
+The main focus of this test is to make sure that the solver mantains a good behaviour when the frequency $K$
+of the tiles
+becomes higher, \textit{i.e.} the number of discontinuities in the permeability grows.
+
+In the table we compare the iterations needed by the GMRES when solving the preconditioner with a
+direct method (It$_d$), and when applying the multigrid method (It$_{mg}$).
+\begin{table}
+\small
+\begin{center}
+    \begin{tabular}{c|c|c|c|c|c}
+        \toprule
+        & & & & &\\[-2ex] %hack per lasciare un po' di spazio
+        $\mu$  &
+    \includegraphics[scale=0.5]{images/burst_6.png}
+        &
+    \includegraphics[scale=0.5]{images/burst_5.png}
+        &
+    \includegraphics[scale=0.5]{images/burst_4.png}
+        &
+    \includegraphics[scale=0.5]{images/burst_3.png}
+        &
+    \includegraphics[scale=0.5]{images/burst_2.png}
+    \\ \midrule
+        $K$        & 6 & 5 & 4 & 3 & 2 \\% \hline
+    $\text{It}_{\text{d}}$   & 8 & 8 & 8 & 8 & 8 \\% \hline
+    $\text{It}_{\text{mg}}$  & 14& 16& 18& 19& 15\\% \hline
+    \bottomrule
+    \end{tabular}
+\end{center}
+\end{table}
+
+As one might expected, the multigrid method performs generally worse than the
+preconditioner solved with a direct method. However, neither method is
+affected by the change in frequency of the checkerboard pattern.
+
+A similar test has been run by stretching the mesh along one spatial dimension
+to simulate anisotropic coefficients. The preconditioner
+still showed an almost-optimal performance.
+%We are more than satisfied by the robustness of our preconditioner, which proved
+%to mantain an optimal behaviour even when a discontinuous and highly variable permeability is used.
 \end{block}
 
 \end{column} % End of third column
