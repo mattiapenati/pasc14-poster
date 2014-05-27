@@ -27,6 +27,7 @@
 \usepackage{xparse}      % << to create new commands
 \usepackage{tikz}   % << diagrams
   \usetikzlibrary{arrows}
+\usepackage{url}
 
 \usepackage[scale=1]{beamerposter} % Use the beamerposter package for laying out the poster
 \usetheme{confposter} % Use the confposter theme supplied with this template
@@ -331,7 +332,7 @@ direct method (It$_d$), and when applying the multigrid method (It$_{mg}$).
 \begin{table}
 \small
 \begin{center}
-    \begin{tabular}{c|c|c|c|c|c}
+    \begin{tabular}{cccccc}
         \toprule
         & & & & &\\[-2ex] %hack per lasciare un po' di spazio
         $\mu$  &
@@ -376,11 +377,16 @@ still showed an almost-optimal performance.
 
 \begin{block}{Conclusion}
 
-Nunc tempus venenatis facilisis. \textbf{Curabitur suscipit} consequat eros non
-porttitor. Sed a massa dolor, id ornare enim. Fusce quis massa dictum tortor
-\textbf{tincidunt mattis}. Donec quam est, lobortis quis pretium at, laoreet
-scelerisque lacus. Nam quis odio enim, in molestie libero. Vivamus cursus mi at
-\textit{nulla elementum sollicitudin}.
+The numerical performance of the ideal preconditioner with internal direct
+solver is as good as we expected: in all our test cases it proved to be robust
+to mesh refinement, highly variable coefficients, non-squared domains with
+local refinement and anisotropic meshes.
+
+The numerical performance of the ideal preconditioner with internal
+multigrid solver was satisfactory as well: even though the number of the outer
+GMRES iterations is always higher than its direct counterpart, the number of
+iterations stays constant regardless of the level of mesh refinement,
+permeability coefficient and grid anisotropy.
 
 \end{block}
 
@@ -402,7 +408,7 @@ scelerisque lacus. Nam quis odio enim, in molestie libero. Vivamus cursus mi at
 
 \nocite{*} % Insert publications even if they are not cited in the poster
 \small{\bibliographystyle{unsrt}
-\bibliography{sample}\vspace{0.75in}}
+\bibliography{main}\vspace{0.75in}}
 
 \end{block}
 
@@ -430,16 +436,26 @@ senectus et netus et malesuada fames ac turpis egestas.}} \\
 \begin{alertblock}{Contact Information}
 
 \begin{itemize}
-\item Web: \href{http://www.university.edu/smithlab}{http://www.university.edu/smithlab}
-\item Email: \href{mailto:john@smith.com}{john@smith.com}
-\item Phone: +1 (000) 111 1111
+\item Mattia Penati: \href{mailto:mattia.penati@polimi.it}{mattia.penati@polimi.it}
+\item Edie Miglio: \href{mailto:edie.miglio@polimi.it}{edie.miglio@polimi.it}
+\item Francesco Cattoglio: \href{mailto:francesco.cattoglio@mail.polimi.it}{francesco.cattoglio@mail.polimi.it}
+
+\hrulefill
+
+The poster can be downloaded from
+\begin{center}
+    \small
+    \url{https://bitbucket.org/mattiapenati/pasc14-poster}
+\end{center}
 \end{itemize}
 
 \end{alertblock}
 
 \begin{center}
 \begin{tabular}{ccc}
-\includegraphics[width=0.4\linewidth]{logo.png} & \hfill & \includegraphics[width=0.4\linewidth]{logo.png}
+    \includegraphics[width=0.4\linewidth]{images/logopoli} %
+    & \hfill & %
+    \includegraphics[width=0.4\linewidth]{images/logomox}
 \end{tabular}
 \end{center}
 
