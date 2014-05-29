@@ -1,26 +1,3 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Jacobs Landscape Poster
-% LaTeX Template
-% Version 1.0 (29/03/13)
-%
-% Created by:
-% Computational Physics and Biophysics Group, Jacobs University
-% https://teamwork.jacobs-university.de:8443/confluence/display/CoPandBiG/LaTeX+Poster
-% 
-% Further modified by:
-% Nathaniel Johnston (nathaniel@njohnston.ca)
-%
-% This template has been downloaded from:
-% http://www.LaTeXTemplates.com
-%
-% License:
-% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%----------------------------------------------------------------------------------------
-% PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%----------------------------------------------------------------------------------------
 
 \documentclass[final]{beamer}
 
@@ -29,62 +6,41 @@
   \usetikzlibrary{arrows}
 \usepackage{url}
 
-\usepackage[scale=1]{beamerposter} % Use the beamerposter package for laying out the poster
-\usetheme{confposter} % Use the confposter theme supplied with this template
+\usepackage[scale=1]{beamerposter}
+\usetheme{confposter}
 
-\setbeamercolor{block title}{fg=ngreen,bg=white} % Colors of the block titles
-\setbeamercolor{block body}{fg=black,bg=white} % Colors of the body of blocks
-\setbeamercolor{block alerted title}{fg=white,bg=dblue!70} % Colors of the highlighted block titles
-\setbeamercolor{block alerted body}{fg=black,bg=dblue!10} % Colors of the body of highlighted blocks
-% Many more colors are available for use in beamerthemeconfposter.sty
-
-%-----------------------------------------------------------
-% Define the column widths and overall poster size
-
-% To set effective sepwid, onecolwid and twocolwid values, first choose how many
-% columns you want and how much separation you want between columns
-
-% In this template, the separation width chosen is 0.024 of the paper width and
-% a 4-column layout onecolwid should therefore be (1-(# of columns+1)*sepwid)/#
-% of columns e.g. (1-(4+1)*0.024)/4 = 0.22
-
-% Set twocolwid to be (2*onecolwid)+sepwid = 0.464
-% Set threecolwid to be (3*onecolwid)+2*sepwid = 0.708
+\setbeamercolor{block title}{fg=ngreen,bg=white}
+\setbeamercolor{block body}{fg=black,bg=white}
+\setbeamercolor{block alerted title}{fg=white,bg=dblue!70}
+\setbeamercolor{block alerted body}{fg=black,bg=dblue!10}
 
 \newlength{\sepwid}
 \newlength{\onecolwid}
 \newlength{\twocolwid}
 \newlength{\threecolwid}
-\setlength{\paperwidth}{48in} % A0 width: 46.8in
-\setlength{\paperheight}{36in} % A0 height: 33.1in
-\setlength{\sepwid}{0.024\paperwidth} % Separation width (white space) between columns
-\setlength{\onecolwid}{0.22\paperwidth} % Width of one column
-\setlength{\twocolwid}{0.464\paperwidth} % Width of two columns
-\setlength{\threecolwid}{0.708\paperwidth} % Width of three columns
-\setlength{\topmargin}{-0.5in} % Reduce the top margin size
-%-----------------------------------------------------------
+% A0 paper
+\setlength{\paperwidth}{48in}
+\setlength{\paperheight}{36in}
+
+\setlength{\sepwid}{0.024\paperwidth}
+\setlength{\onecolwid}{0.22\paperwidth}
+\setlength{\twocolwid}{0.464\paperwidth}
+\setlength{\threecolwid}{0.708\paperwidth}
+\setlength{\topmargin}{-0.5in}
 
 \usepackage{graphicx}  % Required for including images
 \usepackage{booktabs} % Top and bottom rules for tables
 
-%-----------------------------------------------------------
 % fonts
 \usepackage{fontspec} 
 \usepackage{xunicode}
 \usepackage{xltxtra}
 \defaultfontfeatures{Mapping=tex-text}
 \setromanfont[Ligatures={Common},Numbers={OldStyle},Variant=01]{Linux Libertine O}
-%-----------------------------------------------------------
-
-%----------------------------------------------------------------------------------------
-% TITLE SECTION 
-%----------------------------------------------------------------------------------------
 
 \title{Multigrid preconditioner for saddle point problems with highly variable coefficients}
 \author{Mattia Penati and Edie Miglio}
 \institute{Politecnico di Milano - Department of Mathematics - MOX}
-
-%----------------------------------------------------------------------------------------
 
 % ======================================================== math
 \usepackage{listings}
@@ -128,15 +84,15 @@
 
 \begin{document}
 
-\addtobeamertemplate{block end}{}{\vspace*{2ex}} % White space under blocks
-\addtobeamertemplate{block alerted end}{}{\vspace*{2ex}} % White space under highlighted (alert) blocks
+\addtobeamertemplate{block end}{}{\vspace*{2ex}}
+\addtobeamertemplate{block alerted end}{}{\vspace*{2ex}}
 
-\setlength{\belowcaptionskip}{2ex} % White space under figures
-\setlength\belowdisplayshortskip{2ex} % White space under equations
+\setlength{\belowcaptionskip}{2ex}
+\setlength\belowdisplayshortskip{2ex}
 
-\begin{frame}[t] % The whole poster is enclosed in one beamer frame
+\begin{frame}[t]
 
-\begin{columns}[t] % The whole poster consists of three major columns, the second of which is split into two columns twice - the [t] option aligns each column's content to the top
+\begin{columns}[t]
 
 \begin{column}{\onecolwid} % The first column
 
@@ -280,8 +236,6 @@ On the other hand, support for shared memory parallelism is complete.
 
 \end{block}
 
-%----------------------------------------------------------------------------------------
-
 \end{column} % End of the second column
 
 
@@ -370,10 +324,6 @@ still showed an almost-optimal performance.
 
 \begin{column}{\onecolwid} % The fourth column
 
-%----------------------------------------------------------------------------------------
-% CONCLUSION
-%----------------------------------------------------------------------------------------
-
 \begin{block}{Conclusions}
 
 The numerical performance of the ideal preconditioner with internal direct
@@ -396,31 +346,19 @@ permeability coefficient and grid anisotropy.
         multigrid-based preconditioner running on the MPI version of the code.
     \item Using a mixed-hybrid discretization technique to reduce the number of
         the unknowns and obtaining a more efficient solver.
-%    \item Looking for more possible use cases for a geometric multigrid
-%        preconditioner having the same or a similar structure to the one we
-%        implemented.
 \end{itemize}
 
 \end{block}
 
-%----------------------------------------------------------------------------------------
-% REFERENCES
-%----------------------------------------------------------------------------------------
-
 \begin{block}{References}
 
-\nocite{*} % Insert publications even if they are not cited in the poster
+\nocite{*}
 \footnotesize{\bibliographystyle{unsrt}
 \bibliography{poster}\vspace{0.75in}}
 
 \end{block}
 
-%----------------------------------------------------------------------------------------
-% ACKNOWLEDGEMENTS
-%----------------------------------------------------------------------------------------
-
-\setbeamercolor{block title}{fg=red,bg=white} % Change the block title color
-
+\setbeamercolor{block title}{fg=red,bg=white}
 \begin{block}{Acknowledgements}
 
 We would like to thank Francesco Cattoglio for the substantial
@@ -428,13 +366,8 @@ contributions to the C++ codebase used in this work and his willingness to help.
 
 \end{block}
 
-%----------------------------------------------------------------------------------------
-% CONTACT INFORMATION
-%----------------------------------------------------------------------------------------
-
-\setbeamercolor{block alerted title}{fg=black,bg=norange} % Change the alert block title colors
-\setbeamercolor{block alerted body}{fg=black,bg=white} % Change the alert block body colors
-
+\setbeamercolor{block alerted title}{fg=black,bg=norange}
+\setbeamercolor{block alerted body}{fg=black,bg=white}
 \begin{alertblock}{Contact Informations}
 
 \begin{itemize}
@@ -464,9 +397,6 @@ contributions to the C++ codebase used in this work and his willingness to help.
 \end{columns}
 
 \end{alertblock}
-
-
-%----------------------------------------------------------------------------------------
 
 \end{column} % End of the third column
 
